@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Override Indigo with Emerald (Primary Green Accent) */
+  --color-indigo-50: #f0fdf4;
+  --color-indigo-100: #dcfce7;
+  --color-indigo-200: #bbf7d0;
+  --color-indigo-300: #86efac;
+  --color-indigo-400: #4ade80;
+  --color-indigo-500: #10b981;
+  --color-indigo-600: #059669;
+  --color-indigo-700: #047857;
+  --color-indigo-800: #065f46;
+  --color-indigo-900: #064e3b;
+  --color-indigo-950: #022c22;
+
+  /* Override Violet with Light Mint Green */
+  --color-violet-50: #f4fbf7;
+  --color-violet-100: #e6f7ee;
+  --color-violet-200: #c2eed5;
+  --color-violet-300: #8ee0b2;
+  --color-violet-400: #51cb8b;
+  --color-violet-500: #2ebb7a;
+  --color-violet-600: #1ea265;
+  --color-violet-700: #188152;
+  --color-violet-800: #176643;
+  --color-violet-900: #145439;
+  --color-violet-950: #0a3020;
+
+  /* Override Blue with Forest Green */
+  --color-blue-50: #f0fdf4;
+  --color-blue-100: #dcfce7;
+  --color-blue-200: #bbf7d0;
+  --color-blue-300: #86efac;
+  --color-blue-400: #4ade80;
+  --color-blue-500: #22c55e;
+  --color-blue-600: #16a34a;
+  --color-blue-700: #15803d;
+  --color-blue-800: #166534;
+  --color-blue-900: #14532d;
+  --color-blue-950: #052e16;
+
+  /* Override Purple with Green Accent */
+  --color-purple-50: #f0fdf4;
+  --color-purple-100: #dcfce7;
+  --color-purple-200: #bbf7d0;
+  --color-purple-300: #86efac;
+  --color-purple-400: #4ade80;
+  --color-purple-500: #10b981;
+  --color-purple-600: #059669;
+  --color-purple-700: #047857;
+  --color-purple-800: #065f46;
+  --color-purple-900: #064e3b;
+  --color-purple-950: #022c22;
+}
