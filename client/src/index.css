@@ -55,3 +55,69 @@
   --color-purple-900: #064e3b;
   --color-purple-950: #022c22;
 }
+
+/* Quill and Rich Text rendering styling */
+.quill-render {
+  font-family: inherit;
+  line-height: 1.75;
+}
+
+.quill-render pre {
+  background-color: #0f172a !important; /* Premium dark background for code blocks */
+  color: #f8fafc !important;
+  padding: 1.25rem 1.5rem !important;
+  border-radius: 0.75rem !important;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.9rem !important;
+  margin: 1.5rem 0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.quill-render p {
+  margin-bottom: 1.25rem;
+}
+
+.quill-render img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  margin: 1.5rem auto;
+  display: block;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.quill-render a {
+  color: #10b981;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.quill-render blockquote {
+  border-left: 4px solid #10b981;
+  padding-left: 1.25rem;
+  font-style: italic;
+  color: #64748b;
+  margin: 1.5rem 0;
+}
+
+.dark .quill-render blockquote {
+  color: #94a3b8;
+}
+
+/* Adjusting Editor Container's code highlighting colors & inline images */
+.ql-editor pre.ql-syntax {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+  border-radius: 0.75rem !important;
+  padding: 1rem !important;
+}
+
+.ql-editor img {
+  max-width: 100%;
+  border-radius: 0.75rem;
+  display: block;
+  margin: 1rem auto;
+}
+

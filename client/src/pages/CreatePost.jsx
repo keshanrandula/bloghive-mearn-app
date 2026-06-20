@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/github.css';
 import axiosInstance from '../utils/axiosInstance';
 import { PenTool, Image, Tag, Folder, Upload, Loader } from 'lucide-react';
+
+// Bind highlight.js to window object so Quill can use it internally for syntax highlighting
+if (typeof window !== 'undefined') {
+  window.hljs = hljs;
+}
 
 const CATEGORIES = ['Technology', 'Design', 'Engineering', 'Lifestyle', 'Business'];
 
 const CreatePost = () => {
   const navigate = useNavigate();
+  const quillRef = useRef(null);
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -20,6 +28,40 @@ const CreatePost = () => {
   const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  // Handle inline image upload inside Quill editor toolbar
+  const handleInlineImageUpload = () => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+
+    input.onchange = async () => {
+      const file = input.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('image', file);
+
+      try {
+        const response = await axiosInstance.post('/api/upload', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        if (response.data.success) {
+          const quill = quillRef.current.getEditor();
+          const range = quill.getSelection();
+          if (range) {
+            quill.insertEmbed(range.index, 'image', response.data.url);
+            quill.setSelection(range.index + 1);
+          } else {
+            quill.insertEmbed(quill.getLength(), 'image', response.data.url);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to upload editor inline image:', err);
+      }
+    };
+  };
 
   // Handle Cover Image upload to Cloudinary via server API
   const handleImageUpload = async (e) => {
@@ -85,15 +127,28 @@ const CreatePost = () => {
   };
 
   // React Quill formats/modules
-  const modules = {
-    toolbar: [
-      [{ header: [1, 2, 3, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ list: 'ordered' }, { list: 'bullet' }],
-      ['link', 'blockquote', 'code-block'],
-      ['clean']
-    ]
-  };
+  const modules = useMemo(() => ({
+    syntax: true,
+    toolbar: {
+      container: [
+        [{ header: [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        ['link', 'blockquote', 'code-block', 'image'],
+        ['clean']
+      ],
+      handlers: {
+        image: handleInlineImageUpload
+      }
+    }
+  }), []);
+
+  const formats = [
+    'header',
+    'bold', 'italic', 'underline', 'strike',
+    'list',
+    'link', 'blockquote', 'code-block', 'image'
+  ];
 
   return (
     <div className="max-w-3xl mx-auto py-10 px-4 md:px-0 relative">
@@ -239,10 +294,12 @@ const CreatePost = () => {
           <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-3">Content Body</label>
           <div className="quill-container rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
             <ReactQuill
+              ref={quillRef}
               theme="snow"
               value={content}
               onChange={setContent}
               modules={modules}
+              formats={formats}
               placeholder="Tell your story..."
             />
           </div>

@@ -3,6 +3,8 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import axiosInstance from '../utils/axiosInstance';
 import CommentSection from '../components/CommentSection';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/github-dark.css'; // Premium dark-friendly code highlighting theme
 import { Heart, MessageSquare, Calendar, Trash2, ArrowLeft, Bookmark, AlertCircle, Edit, Shield, Loader, Lock, CreditCard } from 'lucide-react';
 
 const SinglePost = () => {
@@ -83,6 +85,15 @@ const SinglePost = () => {
     };
     loadData();
   }, [id, currentUser]);
+
+  useEffect(() => {
+    if (post && isUnlocked) {
+      // Highlight code elements
+      document.querySelectorAll('.quill-render pre').forEach((block) => {
+        hljs.highlightElement(block);
+      });
+    }
+  }, [post, isUnlocked, loading]);
 
   const handleLike = async () => {
     if (!currentUser) {
